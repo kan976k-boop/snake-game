@@ -196,20 +196,21 @@ button:active {
 }
 
 .d-pad-btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 15px; /* Square with rounded corners for better feel */
-    background: rgba(30, 30, 40, 0.9);
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: rgba(15, 15, 20, 0.8);
     border: 2px solid var(--neon-blue);
     color: var(--neon-blue);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
     touch-action: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s ease;
 }
 
 .d-pad-btn:active {
