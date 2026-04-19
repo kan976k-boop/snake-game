@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Snake</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="score-board">
+                SKOR: <span id="score">0</span>
+            </div>
+            <div class="level-board" style="color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink);">
+                SEVİYE: <span id="level">1</span>
+            </div>
+            <div class="high-score-board">
+                REKOR: <span id="high-score">0</span>
+            </div>
+        </div>
+        <div class="stats-header" style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; color: #fff; font-size: 0.9rem; align-items: center;">
+            <div class="health-bar-container" style="flex: 1; display: flex; align-items: center; margin-right: 15px;">
+                <span style="margin-right: 10px; color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green);">CAN:</span>
+                <div class="health-bar" style="flex: 1; background: #222; height: 15px; border-radius: 5px; overflow: hidden; border: 1px solid #444;">
+                    <div id="health-fill" style="width: 100%; height: 100%; background: var(--neon-green); transition: width 0.3s, background-color 0.3s;"></div>
+                </div>
+            </div>
+            <div class="coins-board" style="color: gold; text-shadow: 0 0 5px gold;">
+                ALTIN: <span id="coins">0</span>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            
+            <div id="name-entry-overlay" class="overlay active" style="background: rgba(10, 10, 15, 0.95);">
+                <h1>İSİM GİRİŞİ</h1>
+                <p style="margin-bottom: 20px;">Sıralamaya girmek için bir ad belirle</p>
+                <input type="text" id="player-name-input" placeholder="Adınız..." maxlength="15" autocomplete="off" class="neon-input">
+                <button id="save-name-btn" style="margin-top: 20px;">ONAYLA</button>
+            </div>
+
+            <div id="start-overlay" class="overlay">
+                <h1>NEON YILAN</h1>
+                <p>Başlamak için <span class="key">Boşluk</span>'a bas veya ekrana dokun</p>
+                <div class="controls-hint">Yön tuşlarını, WASD'yi veya kaydırma (swipe) hareketlerini kullan</div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button id="open-shop-btn" style="border-color: gold; color: gold; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.2);">MARKET</button>
+                    <button id="open-leaderboard-btn" style="border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2);">SIRALAMA</button>
+                </div>
+            </div>
+
+            <div id="game-over-overlay" class="overlay">
+                <h1>OYUN BİTTİ</h1>
+                <p>Skor: <span id="final-score">0</span></p>
+                <button id="restart-btn">Tekrar Oyna</button>
+                <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
+                    <button id="game-over-shop-btn" style="border-color: gold; color: gold; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.2);">MARKET</button>
+                    <button id="game-over-leaderboard-btn" style="border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2);">SIRALAMA</button>
+                </div>
+            </div>
+            
+            <div id="leaderboard-overlay" class="overlay" style="background: rgba(10, 10, 15, 0.95);">
+                <div id="close-leaderboard-btn" class="close-btn">&times;</div>
+                <h1 style="color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); font-size: 2rem;">İLK 10</h1>
+                <ol id="leaderboard-list" class="leaderboard-list">
+                    <!-- JS populates -->
+                </ol>
+            </div>
+            
+            <div id="shop-overlay" class="overlay" style="background: rgba(10, 10, 15, 0.95);">
+                <div id="close-shop-btn" class="close-btn" style="color: gold; text-shadow: 0 0 10px gold;">&times;</div>
+                <h1 style="color: gold; text-shadow: 0 0 10px gold; font-size: 2rem;">MARKET</h1>
+                <p style="color: gold; font-size: 1.2rem; margin-bottom: 20px;">Mevcut Altın: <span id="shop-coins">0</span></p>
+                
+                <div class="shop-items" style="display: flex; flex-direction: column; gap: 15px; width: 90%; max-width: 350px;">
+                    <div class="shop-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div>
+                            <h3 style="color: var(--neon-green); font-size: 1rem;">Maksimum Can</h3>
+                            <p style="font-size: 0.7rem; margin-bottom: 0;">Mevcut: <span id="current-max-health">100</span></p>
+                        </div>
+                        <button id="buy-health-btn" style="padding: 8px 12px; font-size: 0.9rem; border-color: var(--neon-green); color: var(--neon-green); margin-top: 0; min-width: 90px;"><span id="health-cost">100</span> Altın</button>
+                    </div>
+                    
+                    <div class="shop-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div>
+                            <h3 style="color: var(--neon-pink); font-size: 1rem;">Duvar Zırhı</h3>
+                            <p style="font-size: 0.7rem; margin-bottom: 0;">Mevcut Hasar: <span id="current-wall-damage">50</span>%</p>
+                        </div>
+                        <button id="buy-armor-btn" style="padding: 8px 12px; font-size: 0.9rem; border-color: var(--neon-pink); color: var(--neon-pink); margin-top: 0; min-width: 90px;"><span id="armor-cost">150</span> Altın</button>
+                    </div>
+                    
+                    <div class="shop-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div>
+                            <h3 style="color: var(--neon-blue); font-size: 1rem;">Puan Çarpanı</h3>
+                            <p style="font-size: 0.7rem; margin-bottom: 0;">Mevcut: <span id="current-score-multiplier">10</span> Puan/Elma</p>
+                        </div>
+                        <button id="buy-multiplier-btn" style="padding: 8px 12px; font-size: 0.9rem; border-color: var(--neon-blue); color: var(--neon-blue); margin-top: 0; min-width: 90px;"><span id="multiplier-cost">200</span> Altın</button>
+                    </div>
+                    
+                    <div class="shop-item" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div>
+                            <h3 style="color: gold; font-size: 1rem;">Elma Şifası</h3>
+                            <p style="font-size: 0.7rem; margin-bottom: 0;">Mevcut: +<span id="current-apple-heal">0</span> Can/Elma</p>
+                        </div>
+                        <button id="buy-heal-btn" style="padding: 8px 12px; font-size: 0.9rem; border-color: gold; color: gold; margin-top: 0; min-width: 90px;"><span id="heal-cost">150</span> Altın</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Controls -->
+        <div class="mobile-controls">
+            <div class="control-row" style="justify-content: center;">
+                <button class="d-pad-btn" id="btn-up">▲</button>
+            </div>
+            <div class="control-row">
+                <button class="d-pad-btn" id="btn-left">◀</button>
+                <button class="d-pad-btn" id="btn-down">▼</button>
+                <button class="d-pad-btn" id="btn-right">▶</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
