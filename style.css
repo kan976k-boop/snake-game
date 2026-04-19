@@ -247,8 +247,10 @@ button:active {
     }
     .mobile-controls {
         display: flex;
-        margin-top: 5px;
-        padding-bottom: 20px;
+        margin-top: -60px; /* Pull them way up into the gap */
+        padding-bottom: 40px;
+        position: relative;
+        z-index: 5;
     }
 }
 
