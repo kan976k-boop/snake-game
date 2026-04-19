@@ -198,8 +198,8 @@ button:active {
 .d-pad-btn {
     width: 65px;
     height: 65px;
-    border-radius: 50%;
-    background: rgba(15, 15, 20, 0.8);
+    border-radius: 15px;
+    background: rgba(15, 15, 20, 0.9);
     border: 2px solid var(--neon-blue);
     color: var(--neon-blue);
     font-size: 1.5rem;
@@ -247,7 +247,7 @@ button:active {
     }
     .mobile-controls {
         display: flex;
-        margin-top: -160px; /* Çok daha fazla yukarı aldım */
+        margin-top: -180px; /* Biraz daha yukarı çektim */
         padding-bottom: 20px;
         position: relative;
         z-index: 5;
