@@ -241,8 +241,8 @@ button:active {
         margin: 0;
     }
     .canvas-container {
-        width: 80vw !important;
-        height: 80vw !important;
+        width: 95vw !important;
+        height: 95vw !important;
         margin: 0 auto;
     }
     .header {
