@@ -1,0 +1,302 @@
+:root {
+    --bg-color: #0f0f13;
+    --neon-green: #39ff14;
+    --neon-green-glow: rgba(57, 255, 20, 0.5);
+    --neon-pink: #ff00ff;
+    --neon-pink-glow: rgba(255, 0, 255, 0.5);
+    --neon-blue: #00ffff;
+    --text-color: #fff;
+    --font-family: 'Orbitron', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(20, 20, 30, 1) 0%, rgba(5, 5, 10, 1) 100%);
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--neon-blue);
+    color: var(--neon-blue);
+}
+
+.canvas-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.1),
+        inset 0 0 20px rgba(0, 0, 0, 0.8);
+    background-color: #050505;
+    border: 2px solid #222;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Pseudo-elements to center content when not overflowing */
+.overlay::before,
+.overlay::after {
+    content: '';
+    margin: auto;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.overlay h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--neon-green);
+    text-shadow: 
+        0 0 10px var(--neon-green),
+        0 0 20px var(--neon-green),
+        0 0 40px var(--neon-green);
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+#game-over-overlay h1 {
+    color: var(--neon-pink);
+    text-shadow: 
+        0 0 10px var(--neon-pink),
+        0 0 20px var(--neon-pink),
+        0 0 40px var(--neon-pink);
+}
+
+.overlay p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #ccc;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+.key {
+    background: #333;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    color: #fff;
+    box-shadow: 0 4px 0 #111;
+    font-size: 0.9em;
+}
+
+.controls-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 30px;
+    letter-spacing: 1px;
+}
+
+button {
+    background: transparent;
+    color: var(--neon-blue);
+    font-family: var(--font-family);
+    font-size: 1.2rem;
+    padding: 12px 35px;
+    border: 2px solid var(--neon-blue);
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    margin-top: 10px;
+}
+
+button:hover {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px var(--neon-blue);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.mobile-controls {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.control-row {
+    display: flex;
+    gap: 15px;
+}
+
+.d-pad-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px; /* Square with rounded corners for better feel */
+    background: rgba(30, 30, 40, 0.9);
+    border: 2px solid var(--neon-blue);
+    color: var(--neon-blue);
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    touch-action: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.d-pad-btn:active {
+    background: var(--neon-blue);
+    color: #000;
+}
+
+@media (max-width: 600px) {
+    .mobile-controls {
+        display: flex;
+        margin-top: auto; /* Push to bottom */
+        padding-bottom: 20px;
+    }
+    .game-container {
+        padding: 10px;
+        gap: 10px;
+    }
+    .canvas-container {
+        max-width: 85vw;
+        max-height: 85vw;
+    }
+    .header {
+        font-size: 0.8rem;
+    }
+    .overlay h1 {
+        font-size: 1.5rem;
+    }
+}
+
+.neon-input {
+    background: transparent;
+    border: 2px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    font-family: 'Orbitron', sans-serif;
+    border-radius: 5px;
+    outline: none;
+    text-align: center;
+    width: 80%;
+    max-width: 250px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+.neon-input:focus {
+    box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px var(--neon-blue);
+}
+.neon-input::placeholder {
+    color: rgba(0, 255, 255, 0.5);
+}
+
+.leaderboard-list {
+    list-style-type: decimal;
+    padding-left: 30px;
+    color: #fff;
+    text-align: left;
+    width: 80%;
+    max-width: 300px;
+    margin: 20px auto;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+.leaderboard-list li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+.leaderboard-list span.score {
+    color: var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2.5rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 100;
+    transition: all 0.3s ease;
+    user-select: none;
+    padding: 5px;
+}
+
+.close-btn:hover {
+    transform: scale(1.2) rotate(90deg);
+    color: #fff;
+}
