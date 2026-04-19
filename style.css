@@ -246,8 +246,8 @@ button:active {
     }
     .mobile-controls {
         display: flex;
-        margin-top: 20px;
-        padding-bottom: 30px;
+        margin-top: 10px;
+        padding-bottom: 60px;
     }
 }
 
